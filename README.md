@@ -134,6 +134,7 @@ Asset extraction is run automatically after building if zelda3_assets.dat and di
 <details>
 <summary>Advanced CMake Usage</summary>
 The following options can be provided at the end of the configure command to change various options.
+
 - `-G Ninja`: Choose a generator. Cmake will typically default to Ninja if it is installed,
 or you can specify an IDE to generate project files for it (i.e. `-G Visual Studio 17 2022`
 to generate Visual Studio 2022 solutions, or `-G Xcode` for MacOS). Running `cmake --help`
