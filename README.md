@@ -117,6 +117,32 @@ make # Add -j$(nproc) to build using all cores ( Optional )
 nxlink -s zelda3.nro
 ```
 
+## Building with CMake (All Platforms)
+
+Make sure Python and the dependencies for your platform (see instructions for your platform above) have been installed.
+
+```sh
+# Configure command
+cmake -S . -B build
+
+# Build command
+cmake --build build
+```
+
+Asset extraction is run automatically after building if zelda3_assets.dat and dialogue.txt are not present.
+
+<details>
+<summary>Advanced CMake Usage</summary>
+The following options can be provided at the end of the configure command to change various options.
+- `-G Ninja`: Choose a generator. Cmake will typically default to Ninja if it is installed,
+or you can specify an IDE to generate project files for it (i.e. `-G Visual Studio 17 2022`
+to generate Visual Studio 2022 solutions, or `-G Xcode` for MacOS). Running `cmake --help`
+will list the available generators for your platform.
+- `-DCMAKE_BUILD_TYPE:STRING=...`: Release, Debug, RelWithDebInfo, MinSizeRel. Default is Release.
+- `-DCMAKE_C_COMPILER=clang`: Choose a non-default C compiler.
+- `--toolchain ${DEVKITPRO}/cmake/Switch.cmake`: Builds an NRO for the Nintendo Switch.
+</details>
+
 ## More Compilation Help
 
 Look at the wiki at https://github.com/snesrev/zelda3/wiki for more help.
