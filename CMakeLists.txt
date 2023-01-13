@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.25)
-project(zelda3 VERSION 1.0 LANGUAGES C)
+project(zelda3 VERSION 1.0 LANGUAGES C CXX)
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 11 CACHE STRING "The C++ Standard to use")
 set(default_build_type "Release")
-if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_SYSTEM_NAME MATCHES "NintendoSwitch")
   message(STATUS "Setting build type to '${default_build_type}' as none was specified.")
   set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE
       STRING "Choose the type of build." FORCE)
@@ -9,7 +11,9 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
     "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
+
 find_package(SDL2)
+
 add_executable(zelda3 
     ancilla.c
     attract.c
@@ -54,7 +58,19 @@ add_executable(zelda3
     third_party/opus-1.3.1-stripped/opus_decoder_amalgam.c
 )
 
-target_link_libraries(zelda3 PUBLIC SDL2::SDL2 PRIVATE m)
+target_link_libraries(zelda3 SDL2::SDL2 m stdc++)
+
+if(CMAKE_SYSTEM_NAME MATCHES "NintendoSwitch")
+    nx_generate_nacp(zelda3.nacp
+        NAME "The Legend of Zelda: A Link to the Past"
+        AUTHOR "snesrev"
+        VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
+    nx_create_nro(zelda3
+        NACP zelda3.nacp
+        ICON ${CMAKE_CURRENT_SOURCE_DIR}/platform/switch/icon.jpg)
+    set_target_properties(zelda3 PROPERTIES LINKER_LANGUAGE CXX)
+endif()
+
 
 find_package(PythonInterp REQUIRED)
 add_custom_command(OUTPUT "${CMAKE_CURRENT_SOURCE_DIR}/tables/dialogue.txt"
