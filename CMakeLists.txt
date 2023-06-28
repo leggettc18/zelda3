@@ -153,7 +153,6 @@ add_executable(zelda3 ${ZELDA} ${SNES} ${THIRDPARTY} ${THIRDPARTY_OPUS}
                       ${PLATFORM} ${RESOURCES})
 
 configure_file(zelda3.ini zelda3.ini COPYONLY)
-# configure_file(tables/zelda3_assets.dat zelda3_assets.dat COPYONLY)
 
 target_link_libraries(zelda3 SDL2::SDL2 $<$<NOT:$<PLATFORM_ID:Windows>>:m>)
 
